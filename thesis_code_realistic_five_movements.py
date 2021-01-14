@@ -250,55 +250,14 @@ def Train(conc_array):
         else:
             pass
 
-        #### Here i send the predicted value to Arduino via Bluetooth so that it can open appropriate fingers ####
 
-        # While 1 is used because sometimes bluetooth port throws exception in opening the COM Port
-        # So i keep trying until the data is sent and confirmation received.
-        while (1):
-            try:
-                # Bluetooth at COM6
-                serialPort = serial.Serial(port="COM6", baudrate=9600, bytesize=8, timeout=2,
-                                           stopbits=serial.STOPBITS_ONE)
-                value_to_bluetooth = str(predicted_value).encode()
-                serialPort.write(value_to_bluetooth)
-                time.sleep(1)
-                if serialPort.in_waiting > 0:
-                    serialString = serialPort.readline()
-                    print(serialString)
-                    # If we receive what we sent from Arduino bluetooth then all OK else bad value
-                    if serialString == value_to_bluetooth:
-                        print("Received")
-                    else:
-                        print("Bad value")
-                serialPort.close()
-                break
-            except serial.SerialException as e:
-                # There is no new data from serial port
-                print(str(e))
-            except TypeError as e:
-                print(str(e))
-                # ser.port.close()
+def predict():
+    """
 
+    :return:
+    """
 
 def main():
-    index_open_training_set = np.zeros((8, number_of_samples))
-    middle_open_training_set = np.zeros((8, number_of_samples))
-    thumb_open_training_set = np.zeros((8, number_of_samples))
-    ring_open_training_set = np.zeros((8, number_of_samples))
-    pinky_open_training_set = np.zeros((8, number_of_samples))
-
-    verification_set = np.zeros((8, number_of_samples))
-
-    training_set = np.zeros((8, number_of_samples))
-    # This function kills Myo Connect.exe and restarts it to make sure it is running
-    # Because sometimes the application does not run even when Myo Connect process is running
-    # So i think its a good idea to just kill if its not running and restart it
-
-    # while(restart_process()!=True):
-    #     pass
-    # Wait for 3 seconds until Myo Connect.exe starts
-    time.sleep(3)
-
     # Initialize the SDK of Myo Armband
     myo.init(sdk_path='sdk')
     # myo.init('C:\\Users\\shaya\\AppData\\Local\\Programs\\Python\\Python36\\myo64.dll')
@@ -319,9 +278,6 @@ def main():
             data_array.clear()
             break
         except:
-            # while(restart_process()!=True):
-            #     pass
-            # Wait for 3 seconds until Myo Connect.exe starts
             time.sleep(3)
 
     # Here we send the received number of samples making them a list of 1000 rows 8 columns just how we need to feed to tensorflow
@@ -436,5 +392,5 @@ def my_train():
 
 
 if __name__ == '__main__':
-    main()
-    # my_train()
+    # main()
+    my_train()
