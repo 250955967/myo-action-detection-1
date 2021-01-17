@@ -15,7 +15,7 @@ from keras import regularizers
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-number_of_samples = 1000
+number_of_samples = 2000
 
 
 class Listener(myo.DeviceListener):
@@ -43,12 +43,13 @@ class Listener(myo.DeviceListener):
                 return False
 
 
-def collect(hub, gesture):
+def collect(myo, gesture):
     """
     收集数据
     :param myo:
     :return:
     """
+    hub = myo.Hub()
     listener = Listener(number_of_samples)
     hub.run(listener.on_event, 20000)
     data_set = np.array((listener.data_array[0]))
@@ -67,6 +68,7 @@ def data_process(data):
     """
     div = 50
     averages = int(number_of_samples / div)
+    data = np.absolute(data)
     result_data = np.zeros((int(averages), 8))
     for i in range(1, averages + 1):
         result_data[i - 1, :] = np.mean(data[(i - 1) * div:i * div, :], axis=0)
@@ -81,8 +83,10 @@ def data_process1(df):
     """
     le = preprocessing.LabelEncoder()
     labels = le.fit_transform(df['gesture'])
-    data = df[list(range(8))].values()
+    cols = [str(i) for i in range(8)]
+    data = df[cols].values
     return data, labels
+
 
 def train(data, labels):
     """
@@ -91,7 +95,6 @@ def train(data, labels):
     :return:
     """
     labels_num = len(np.unique(labels))
-    X_train, X_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, random_state=3)
 
     model = keras.Sequential([
         # Input dimensions means input columns. Here we have 8 columns, one for each sensor
@@ -104,10 +107,9 @@ def train(data, labels):
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
 
-    history = model.fit(X_train, y_train, epochs=300, validation_data=(X_test, y_test),
-                        batch_size=16)
+    history = model.fit(data, labels, epochs=300, validation_split=0.2, batch_size=16)
 
-    # model.save('output/five_finger_model.h5')
+    model.save('output/gesture_model.h5')
     plt.plot(history.history['accuracy'])
     plt.plot(history.history['val_accuracy'])
     plt.title('model accuracy')
@@ -127,21 +129,41 @@ def train(data, labels):
     # plt.savefig('output/loss.jpg')
     plt.show()
 
-def main():
+
+def collect_data():
+    """
+
+    :return:
+    """
     # myo.init()
     myo.init(sdk_path='sdk')
-    hub = myo.Hub()
     df = pd.DataFrame()
-    while 1:
-        gesture = input("Hold a finger movement ")
+    gestures = np.loadtxt('data/gesture.csv', dtype='str')
+    # gestures = gestures[:3]
+    for gesture in gestures:
+        print(gesture)
+        input("Hold a finger movement:")
         if gesture == 'end':
             break
-        data = collect(hub, gesture)
+        data = collect(myo, gesture)
         df = df.append(data)
-        print(gesture)
+        # print(gesture)
 
-    df.to_csv('output/gesture_data.csv')
+    df.to_csv('output/gesture_data.csv', index=False)
+
+
+def main():
+    """
+
+    :return:
+    """
+    df = pd.read_csv('output/gesture_data.csv')
+
+    df = df[:5*40]
+    data, labels = data_process1(df)
+    train(data, labels)
 
 
 if __name__ == '__main__':
+    # collect_data()
     main()
