@@ -10,6 +10,7 @@ import time
 import numpy as np
 import pandas as pd
 import sqlalchemy
+import time
 
 engine = sqlalchemy.create_engine('mysql+pymysql://kai:password@localhost/db?charset=utf8mb4')
 number_of_samples = 2000
@@ -75,7 +76,7 @@ def collect_data():
         df = df.append(data)
         # print(gesture)
 
-    df.to_csv('output/gesture_data.csv', index=False)
+    df.to_csv('output/gesture_data_%d.csv'%(int(time.time())), index=False)
 
 
 if __name__ == '__main__':
