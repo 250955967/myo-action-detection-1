@@ -1,4 +1,23 @@
 # myo-action-detection
+```bash
+# 安装虚拟环境-python3
+virtualenv venv
+source venv/bin/activate
+
+# 安装包
+pip install -r requirements.txt
+
+# 复制sdk文件夹到项目根目录
+
+# make dir
+mkdir models
+mkdir output
+
+# 复制模型到models文件夹
+
+# 运行程序
+python3 models.py load
+```
 
 ## data collection
 
@@ -39,3 +58,7 @@
 五指呈现抓形状
 握拳
 
+## 离线收集数据
+```bash
+python3 collect_data_csv.py
+```
