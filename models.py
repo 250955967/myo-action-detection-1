@@ -15,7 +15,7 @@ from collections import deque
 import numpy as np
 import argparse
 
-from collect_data import data_process1, collect
+from collect_data import data_process1, collect, engine
 
 
 class Listener(myo.DeviceListener):
@@ -75,7 +75,8 @@ def dump_model():
     保存模型
     :return:
     """
-    df_data = pd.read_csv('output/gesture_data.csv')
+    # df_data = pd.read_csv('output/gesture_data.csv')
+    df_data = pd.read_sql('select * from genture_data', engine)
     df = pd.DataFrame()
     for gesture in df_data.gesture.unique():
         df_sub = df_data[df_data.gesture == gesture]
