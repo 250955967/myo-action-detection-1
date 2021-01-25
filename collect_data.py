@@ -14,7 +14,9 @@ import keras
 from keras import regularizers
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import sqlalchemy
 
+engine = sqlalchemy.create_engine('mysql+pymysql://kai:password@localhost/db?charset=utf8mb4')
 number_of_samples = 2000
 
 
@@ -53,7 +55,7 @@ def collect(myo, gesture):
     listener = Listener(number_of_samples)
     hub.run(listener.on_event, 20000)
     data_set = np.array((listener.data_array[0]))
-    data_set = data_process(data_set)
+    # data_set = data_process(data_set)
     df = pd.DataFrame(data_set)
     df['gesture'] = gesture
     return df
@@ -150,6 +152,7 @@ def collect_data():
         # print(gesture)
 
     df.to_csv('output/gesture_data.csv', index=False)
+    df.to_sql('genture_data', engine, if_exists='append', index=False)
 
 
 def main():
@@ -159,11 +162,11 @@ def main():
     """
     df = pd.read_csv('output/gesture_data.csv')
 
-    df = df[:5*40]
+    # df = df[:5*40]
     data, labels = data_process1(df)
     train(data, labels)
 
 
 if __name__ == '__main__':
-    # collect_data()
-    main()
+    collect_data()
+    # main()
