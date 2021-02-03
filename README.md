@@ -1,4 +1,6 @@
 # myo-action-detection
+运行程序前需要运行myo connect程序，并将手环通过蓝牙连接到电脑，完成数据同步
+## 环境搭建
 ```bash
 # 安装虚拟环境-python3
 virtualenv venv
@@ -12,26 +14,34 @@ pip install -r requirements.txt
 # make dir
 mkdir models
 mkdir output
-
-# 复制模型到models文件夹
-cp le.pkl models/
-cp random_forest.pkl models/
-
-# 运行程序
-# 运行程序前需要运行myo connect程序，并手环通过蓝牙连接到电脑
-python3 models.py load
 ```
+
+
 
 ## data collection
 
 ## 离线收集数据
 ```bash
 python3 collect_data_csv.py
+# 按照提升摆pose，该程序会将收集的手环数据放在output文件夹下，并且是以“gesture_data”为前缀的csv文件
 ```
 
-## data process
 
-## train
+## data process
+## 模型加载
+```bash
+# 复制模型到models文件夹
+cp le.pkl models/
+cp random_forest.pkl models/
+
+# 运行程序
+python3 models.py load
+```
+## 模型训练train
+```bash
+python3 models.py train
+# 该程序从mysql数据库读取收集的手环收据，单机环境运行需要搭建mysql数据库，并将手环数据导入数据库使用
+```
 
 ## 手势
 

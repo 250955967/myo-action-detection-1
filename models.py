@@ -131,10 +131,11 @@ def predict(clf, data):
 
 if __name__ == '__main__':
     # load_model()
-    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('f', choices=['dump', 'load'], help='func name')
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('f', choices=['train', 'load'], help='func name')
     args = parser.parse_args()
-    if args.f == 'dump':
+    if args.f == 'train':
         dump_model()
     if args.f == 'load':
         load_model()
