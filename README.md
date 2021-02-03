@@ -7,19 +7,27 @@ source venv/bin/activate
 # 安装包
 pip install -r requirements.txt
 
-# 复制sdk文件夹到项目根目录
+# 复制sdk文件夹到项目根目录,
 
 # make dir
 mkdir models
 mkdir output
 
 # 复制模型到models文件夹
+cp le.pkl models/
+cp random_forest.pkl models/
 
 # 运行程序
+# 运行程序前需要运行myo connect程序，并手环通过蓝牙连接到电脑
 python3 models.py load
 ```
 
 ## data collection
+
+## 离线收集数据
+```bash
+python3 collect_data_csv.py
+```
 
 ## data process
 
@@ -58,7 +66,3 @@ python3 models.py load
 五指呈现抓形状
 握拳
 
-## 离线收集数据
-```bash
-python3 collect_data_csv.py
-```

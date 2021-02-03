@@ -9,10 +9,10 @@ from threading import Lock
 import time
 import numpy as np
 import pandas as pd
-import sqlalchemy
+# import sqlalchemy
 import time
 
-engine = sqlalchemy.create_engine('mysql+pymysql://kai:password@localhost/db?charset=utf8mb4')
+# engine = sqlalchemy.create_engine('mysql+pymysql://kai:password@localhost/db?charset=utf8mb4')
 number_of_samples = 2000
 
 
