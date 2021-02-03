@@ -23,7 +23,7 @@ mkdir output
 ## 离线收集数据
 ```bash
 python3 collect_data_csv.py
-# 按照提升摆pose，该程序会将收集的手环数据放在output文件夹下，并且是以“gesture_data”为前缀的csv文件
+# 按照控制台提示摆pose，该程序会将收集的手环数据放在output文件夹下，是以“gesture_data”为前缀的csv文件
 ```
 
 
